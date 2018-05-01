@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 빈등록 -->
+<bean id="memberDao" class="exam.member.DAO.MemberDaoImpl"/>
+<bean id="memberRegisterService" class="exam.member.Service.MemberRegisterServiceImpl">
+<!-- 생성자로 주입 -->
+<constructor-arg ref="memberDao"/>
+</bean>
+
+<!-- 출력하기 위한 빈등록 -->
+<bean id="memberPrinterService" class="exam.member.Service.MemberPrintServiceImpl"/>
+<bean id="memberListPrinterService" class="exam.member.Service.MemberListPrinterServiceImpl">
+	<constructor-arg ref="memberDao" />
+	<constructor-arg ref="memberPrinterService"/>
+</bean>
+
+<!-- 변경하기 위한 빈등록 -->
+<bean id="changePasswordService" class="exam.member.Service.ChangePasswordServiceImpl">
+<constructor-arg ref="memberDao"/>
+</bean>
+
+
+<!-- UI->memberREgisterService에 주입 ==> setter를 이용해서 -->
+<bean id="memberUI" class="exam.member.UI.MemberUI">
+<property name="memberRegisterService" ref="memberRegisterService"/>
+<property name="memberListPrinterService" ref="memberListPrinterService" />
+
+<property name="changePasswordService" ref="changePasswordService" />
+</bean>
+
+</beans>
